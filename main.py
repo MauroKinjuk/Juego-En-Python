@@ -8,7 +8,7 @@ WIN = pygame.display.set_mode(((WIDTH, HEIGHT)))
 pygame.display.set_caption("Un jueguito") #Seteo el titulo de la ventana
 
 #Cargo las imagenes del personaje
-TOM_1 = pygame.image.load(os.path.join("images/tom", "tom-1.png"))
+TOM_1 = pygame.transform.scale(pygame.image.load(os.path.join("images/tom", "tom-1.png")), (120, 200))
 TOM_2 = pygame.image.load(os.path.join("images/tom", "tom-2.png"))
 TOM_2 = pygame.image.load(os.path.join("images/tom", "tom-3.png"))
 
@@ -29,7 +29,15 @@ class Character:
         
 
     def draw(self, window):
-        pygame.draw.rect(window, FONT_RED, (self.x, self.y, 50, 50))
+        window.blit(self.character_img, (self.x, self.y))
+
+class Player(Character):
+    def __init__(self, x, y, health = 100):
+        super().__init__(x, y, health=health)
+        self.character_img = TOM_1
+        self.mask = pygame.mask.from_surface(self.character_img) #Crea una mascara de pixel (Permite hacer colisiones)
+        self.max_healt = health #Lo utilizamos para saber cual es la vida maxima que tenga el jugador
+
 
 
 def main():
@@ -40,7 +48,9 @@ def main():
     main_font = pygame.font.SysFont("comicsans", 50)
     clock = pygame.time.Clock()
 
-    character = Character(350, 350) #Posiciono el personaje
+    player_vel = 5 #Velocidad max en la que se va a mover un personaje al presionar una tecla
+
+    character = Player(350, 350) #Posiciono el personaje X,Y
 
     def redraw_window(): 
         WIN.blit(BACKGROUND, (0,0)) #Coloco el BG
@@ -61,5 +71,11 @@ def main():
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: #Cuando el usuario preciona el boton de cerrar (X)
                 run = False #Cambio para que se cierre la ventana
+        
+        keys = pygame.key.get_pressed() #Declaro la variable que detecta las teclas presionadas
+        if keys[pygame.K_a] or keys[pygame.K_LEFT] and character.x - player_vel > 0: #Tecla a que va hacia la izquierda
+            character.x -= player_vel 
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and character.x +  player_vel + 50 < WIDTH: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
+            character.x += player_vel
 
-main()
+main() #Llamo a la funcion Main par iniciar el juego
