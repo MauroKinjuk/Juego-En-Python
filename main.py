@@ -1,5 +1,6 @@
 import pygame
 import os, time, random
+from pygame import mixer #Mixer para el audio
 pygame.font.init() #Importo para pdoer usar fuentes
 
 #Voy a crear las propiedades de la ventana
@@ -18,6 +19,12 @@ BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("images/backg
 #Colores (RED, GREEN, BLUE) (RGB)
 FONT_RED = (252, 3, 69)
 
+#Cargo la musica
+pygame.init()
+pygame.mixer.music.set_volume(0.2) #Seteo el volumen
+backgroud_music = mixer.music.load("music/battle.wav")
+mixer.music.play(-1)
+
 #Clase del personaje
 class Character:
     def __init__(self, x, y, health=100):
@@ -32,12 +39,11 @@ class Character:
         window.blit(self.character_img, (self.x, self.y))
 
 class Player(Character):
-    def __init__(self, x, y, health = 100):
+    def __init__(self, x, y, health = 100): #Default vida maxima
         super().__init__(x, y, health=health)
         self.character_img = TOM_1
         self.mask = pygame.mask.from_surface(self.character_img) #Crea una mascara de pixel (Permite hacer colisiones)
         self.max_healt = health #Lo utilizamos para saber cual es la vida maxima que tenga el jugador
-
 
 
 def main():
@@ -50,7 +56,7 @@ def main():
 
     player_vel = 5 #Velocidad max en la que se va a mover un personaje al presionar una tecla
 
-    character = Player(350, 420) #Posiciono el personaje X,Y
+    player = Player(350, 420) #Posiciono el personaje X,Y
 
     def redraw_window(): 
         WIN.blit(BACKGROUND, (0,0)) #Coloco el BG
@@ -60,7 +66,7 @@ def main():
         level_lebel = main_font.render(f"Nivel: {level}", 1, FONT_RED)
         WIN.blit(lives_label, (10 , 10)), WIN.blit(level_lebel, (WIDTH - lives_label.get_width() - 10, 10)) #Ancho de la pantalla - ancho de la palabra - 10
         
-        character.draw(WIN) #Llamo al personaje
+        player.draw(WIN) #Llamo al personaje
 
         pygame.display.update() #Updatea la pantalla
 
@@ -72,14 +78,14 @@ def main():
                 run = False #Cambio para que se cierre la ventana
         
         keys = pygame.key.get_pressed() #Declaro la variable que detecta las teclas presionadas
-        if keys[pygame.K_a] or keys[pygame.K_LEFT] and character.x - player_vel > 0: #Tecla a que va hacia la izquierda
-            character.x -= player_vel 
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and character.x +  player_vel + 50 < WIDTH: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
-            character.x += player_vel
-        if keys[pygame.K_w] or keys[pygame.K_UP] and character.y +  player_vel + 50 > 0: #Arriba
-            character.y -= player_vel
-        if keys[pygame.K_s] or keys[pygame.K_DOWN] and character.y +  player_vel + 50 < (HEIGHT - 100): #Arriba
-            character.y += player_vel
+        if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #Tecla a que va hacia la izquierda
+            player.x -= player_vel 
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x +  player_vel + 50 < WIDTH: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
+            player.x += player_vel
+        if keys[pygame.K_w] or keys[pygame.K_UP] and player.y +  player_vel + 50 > 0: #Arriba
+            player.y -= player_vel
+        if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + 50 < (HEIGHT - 100): #Arriba
+            player.y += player_vel
 
         redraw_window() #llamo a la funcion para updatear la pantalla
 
