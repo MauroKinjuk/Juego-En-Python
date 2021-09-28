@@ -12,7 +12,7 @@ pygame.display.set_caption("Un jueguito") #Seteo el titulo de la ventana
 #Cargo las imagenes del personaje
 TOM_1 = pygame.transform.scale(pygame.image.load(os.path.join("images/tom", "tom-1.png")), (120, 120))
 TOM_2 = pygame.image.load(os.path.join("images/tom", "tom-2.png"))
-TOM_2 = pygame.image.load(os.path.join("images/tom", "tom-3.png"))
+TOM_3 = pygame.image.load(os.path.join("images/tom", "tom-3.png"))
 
 #Cargo imagenes del enemigo
 ENEMY_1 = pygame.transform.scale(pygame.image.load(os.path.join("images/enemy", "enemy-1.png")), (120, 120))
@@ -30,7 +30,7 @@ LASER_YELLOW = pygame.image.load(os.path.join("images/disparos", "pixel_laser_ye
 BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("images/background", "background-2.png")), (WIDTH*2, HEIGHT)) #Escalo la imagen de BG al tamaño de la pantalla
 
 #Colores (RED, GREEN, BLUE) (RGB)
-FONT_RED = (252, 3, 69)
+FONT_RED = (252, 3, 69) #Colores de la fuente
 
 #Cargo la musica
 pygame.init()
