@@ -1,5 +1,6 @@
 import pygame
 import os, time, random
+
 from pygame import mixer #Mixer para el audio
 pygame.font.init() #Importo para pdoer usar fuentes
 
@@ -33,7 +34,7 @@ FONT_RED = (252, 3, 69)
 
 #Cargo la musica
 pygame.init()
-pygame.mixer.music.set_volume(0.2) #Seteo el volumen
+pygame.mixer.music.set_volume(0.05) #Seteo el volumen
 backgroud_music = mixer.music.load("music/battle.wav")
 mixer.music.play(-1)
 
