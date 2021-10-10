@@ -1,7 +1,8 @@
 #-----------------------------------------
-#       TO.DO:
+#       TO DO:
 #   *Corregir spawn al azar de carpinchos
-#   *Agregar Menu
+#   *Agregar Menu  -----LISTO
+#   *Animacion carpincho
 #   *Mas cosas
 #-----------------------------------------
 
@@ -22,11 +23,15 @@ PLAYER = pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png"))
 
 #Cargo las imagenes del carpincho corriendo (190px x 190px)
 CARPI_1 = pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png"))
-CARPI_2 = pygame.image.load(os.path.join("images/carpincho", "carpincho-2.png"))
-CARPI_3 = pygame.image.load(os.path.join("images/carpincho", "carpincho-3.png"))
-CARPI_4 = pygame.image.load(os.path.join("images/carpincho", "carpincho-4.png"))
-CARPI_5 = pygame.image.load(os.path.join("images/carpincho", "carpincho-5.png"))
+#carpi = [
+#    pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png")),
+#    pygame.image.load(os.path.join("images/carpincho", "carpincho-2.png")),
+#    pygame.image.load(os.path.join("images/carpincho", "carpincho-3.png")),
+#    pygame.image.load(os.path.join("images/carpincho", "carpincho-4.png")),
+#    pygame.image.load(os.path.join("images/carpincho", "carpincho-5.png"))
+#    ]
 
+carpi_move = False
 #Colores fuentes
 FONT_RED = (252, 3, 69)
 
@@ -88,14 +93,14 @@ def collide(obj1, obj2):
 def main():
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
-    level = 0   #Nivel
+    level = 1   #Nivel
     lives = 5   #Vida
     main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
     lost_font = pygame.font.SysFont("comicsans", 60)    #Fuente de Muerte
 
     enemies = []
     enemy_vel = 5   #Velocidad del enemigo
-    wave_lenght = 0 #Tamaño de la ola
+    wave_lenght = 1 #Tamaño de la ola
 
     player_vel = 5
     player = Player( (WIDTH//2)-95, (HEIGHT - 210)) #Posiciono al personaje en X,Y (Si tiene 190px x 190x)
@@ -119,7 +124,7 @@ def main():
         player.draw(WIN)
 
         if lost:
-            lost_label = lost_font.render("Te tiro el carpincho", 1, FONT_RED)  #Texto si perdemos
+            lost_label = lost_font.render("Te mató el carpincho", 1, FONT_RED)  #Texto si perdemos
             WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))     #Posiciono el texto
 
         pygame.display.update() #Updatea la pantalla
@@ -141,15 +146,17 @@ def main():
                     continue
 
             if len(enemies) == 0:
-                level += 1
-                wave_lenght += 0
+                #Comento esto, ya que puede ser util
+                #level += 1
+                #enemy_vel += 1
+                #wave_lenght += 1
 
-                enemy = Enemy(WIDTH, random.randrange(0,(HEIGHT - 300))) #Spawn del enemigo
+                enemy = Enemy(WIDTH, random.randrange(0,(HEIGHT - 380))) #Spawn del enemigo
                 enemies.append(enemy)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False #Cambio el run a False, para que se cierre el juego
+                    quit() #Cambio el run a False, para que se cierre el juego
 
             keys = pygame.key.get_pressed() #Declaro la variable que detecta las teclas presionadas
             if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #Tecla a que va hacia la izquierda
@@ -171,7 +178,27 @@ def main():
                     player.x = (WIDTH//2)-95
                     player.y = HEIGHT - 210
                     enemies.remove(enemy)
-                elif enemy.x + enemy.get_width() <= 0:
-                    lives -= 1
+                    level -= 1  #Si te matan resto un nivel
+                elif enemy.x + enemy.get_width() <= 0:#Si el enemigo se va de la pantalla
                     enemies.remove(enemy)
-main()
+
+def main_menu():
+    title_font = pygame.font.SysFont("comicsans", 50)   #Fuente del titulo principal
+    run = True
+
+    while run:
+        WIN.blit(BACKGROUND, (0,0))
+        title_label = title_font.render("Presiona un boton del mouse para iniciar...",1, FONT_RED)
+        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, HEIGHT/2))  #Posicion texto principal
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:    #Si se preciona cualquier boton del mouse, empieza el juego
+                main()
+
+    pygame.quit()
+    
+main_menu() #Llamo al menu principal para iniciar el juego
