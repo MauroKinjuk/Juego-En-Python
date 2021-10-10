@@ -156,14 +156,14 @@ def main():
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    quit() #Cambio el run a False, para que se cierre el juego
+                    quit() #Utilizo quit para borrar el error del menu al cerrar el juego
 
             keys = pygame.key.get_pressed() #Declaro la variable que detecta las teclas presionadas
             if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #Tecla a que va hacia la izquierda
                 player.x -= player_vel 
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x +  player_vel + player.get_width() < WIDTH: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
                 player.x += player_vel
-            if keys[pygame.K_w] or keys[pygame.K_UP] and player.y - player_vel > 0: #Arriba
+            if keys[pygame.K_w] or keys[pygame.K_UP]: #Arriba
                 player.y -= player_vel
             if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + player.get_height() + 15 < HEIGHT: #Abajo
                 player.y += player_vel
@@ -178,10 +178,12 @@ def main():
                     player.x = (WIDTH//2)-95
                     player.y = HEIGHT - 210
                     enemies.remove(enemy)
-                    level -= 1  #Si te matan resto un nivel
+                    if level > 0:
+                        level -= 1
                 elif enemy.x + enemy.get_width() <= 0:#Si el enemigo se va de la pantalla
                     enemies.remove(enemy)
 
+#Menu principal
 def main_menu():
     title_font = pygame.font.SysFont("comicsans", 50)   #Fuente del titulo principal
     run = True
