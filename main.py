@@ -1,3 +1,10 @@
+#-----------------------------------------
+#       TO.DO:
+#   *Corregir spawn al azar de carpinchos
+#   *Agregar Menu
+#   *Mas cosas
+#-----------------------------------------
+
 import pygame
 import os, time, random
 
@@ -19,6 +26,9 @@ CARPI_2 = pygame.image.load(os.path.join("images/carpincho", "carpincho-2.png"))
 CARPI_3 = pygame.image.load(os.path.join("images/carpincho", "carpincho-3.png"))
 CARPI_4 = pygame.image.load(os.path.join("images/carpincho", "carpincho-4.png"))
 CARPI_5 = pygame.image.load(os.path.join("images/carpincho", "carpincho-5.png"))
+
+#Colores fuentes
+FONT_RED = (252, 3, 69)
 
 
 #Cargo imagen del background
@@ -48,7 +58,16 @@ class Player(Character):
         super().__init__(x, y, health=health)
         self.character_img = PLAYER
         self.mask = pygame.mask.from_surface(self.character_img) #Crea mascara de colision sobre el personaje
-        self.max_healt = health #Para saber la vida maxima del jugador
+        self.max_health = health #Para saber la vida maxima del jugador
+
+    #Barra de salud
+    def draw(self, window):
+        super().draw(window)
+        self.healthbar(window)
+
+    def healthbar(self, window):
+        pygame.draw.rect(window, (255,0,0), (self.x, self.y + self.character_img.get_height() + 10, self.character_img.get_width(), 10))
+        pygame.draw.rect(window, (0,255,0), (self.x, self.y + self.character_img.get_height() + 10, self.character_img.get_width() * (self.health/self.max_health), 10))
 
 class Enemy(Character): #Clase para los carpinchos
 
@@ -60,24 +79,31 @@ class Enemy(Character): #Clase para los carpinchos
     def move(self, vel):
             self.x -= vel
 
-#Colores fuentes
-FONT_RED = (252, 3, 69)
+#Def de colisiones
+def collide(obj1, obj2):
+    offset_x = obj2.x - obj1.x
+    offset_y = obj2.y - obj1.y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None #Si las mascaras de los objetos se superponen devuelven posiciones (x, y)
 
 def main():
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
     level = 0   #Nivel
     lives = 5   #Vida
-    main_font = pygame.font.SysFont("comicsans", 50)    #Fuente
+    main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
+    lost_font = pygame.font.SysFont("comicsans", 60)    #Fuente de Muerte
 
     enemies = []
     enemy_vel = 5   #Velocidad del enemigo
     wave_lenght = 0 #Tamaño de la ola
 
     player_vel = 5
-    player = Player( (WIDTH/2)-95, (HEIGHT - 190)) #Posiciono al personaje en X,Y (Si tiene 190px x 190x)
+    player = Player( (WIDTH//2)-95, (HEIGHT - 210)) #Posiciono al personaje en X,Y (Si tiene 190px x 190x)
     
     clock = pygame.time.Clock()
+
+    lost = False #Variable que cambia si se pierde
+    lost_count = 0
 
     def redraw_window():
         WIN.blit(BACKGROUND, (0,0)) #Coloco el BG
@@ -92,16 +118,33 @@ def main():
 
         player.draw(WIN)
 
+        if lost:
+            lost_label = lost_font.render("Te tiro el carpincho", 1, FONT_RED)  #Texto si perdemos
+            WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))     #Posiciono el texto
+
         pygame.display.update() #Updatea la pantalla
 
     while run:
             clock.tick(FPS)
+            redraw_window() #Llamo a la funcion para updatear la pantalla
+
+            #Detecta cuando la vida o vida del jugador es 0
+            if lives <= 0 or player.health <= 0:
+                lost = True
+                lost_count += 1
+
+            #Si perdemos, vamos a tener un tiempo para mostar el mensaje
+            if lost:
+                if lost_count > FPS * 3:
+                    run = False
+                else:
+                    continue
 
             if len(enemies) == 0:
                 level += 1
                 wave_lenght += 0
 
-                enemy = Enemy(WIDTH, (HEIGHT / 2) - 95) #Spawn del enemigo
+                enemy = Enemy(WIDTH, random.randrange(0,(HEIGHT - 300))) #Spawn del enemigo
                 enemies.append(enemy)
 
             for event in pygame.event.get():
@@ -115,12 +158,20 @@ def main():
                 player.x += player_vel
             if keys[pygame.K_w] or keys[pygame.K_UP] and player.y - player_vel > 0: #Arriba
                 player.y -= player_vel
-            if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + (player.get_height() + 30) < HEIGHT: #Abajo
+            if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + player.get_height() + 15 < HEIGHT: #Abajo
                 player.y += player_vel
 
             #Movimiento enemigos
-            for enemy in enemies:
+            for enemy in enemies[:]:
                 enemy.move(enemy_vel)
 
-            redraw_window() #llamo a la funcion para updatear la pantalla
+                #Si colisionas los objetos
+                if collide(enemy, player):
+                    player.health -= 10
+                    player.x = (WIDTH//2)-95
+                    player.y = HEIGHT - 210
+                    enemies.remove(enemy)
+                elif enemy.x + enemy.get_width() <= 0:
+                    lives -= 1
+                    enemies.remove(enemy)
 main()
