@@ -8,6 +8,7 @@
 
 import pygame
 import os, time, random
+import pygame_menu #requiere instalar pygame_menu
 
 from pygame import mixer
 
