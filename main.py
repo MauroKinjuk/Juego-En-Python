@@ -168,6 +168,14 @@ def main():
             if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + player.get_height() + 15 < HEIGHT: #Abajo
                 player.y += player_vel
 
+            #Detectar si el jugador sale de la pantalla arriba
+            if player.y - player_vel <= 0:
+                level += 1
+                player.x = (WIDTH//2)-95
+                player.y = HEIGHT - 210
+                enemy_vel += 1
+                #wave_lenght += 1
+
             #Movimiento enemigos
             for enemy in enemies[:]:
                 enemy.move(enemy_vel)
