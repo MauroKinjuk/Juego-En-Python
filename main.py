@@ -12,12 +12,20 @@ import pygame_menu #requiere instalar pygame_menu
 
 from pygame import mixer
 
-pygame.font.init() #Importo para pdoer usar fuentes
+pygame.font.init() #Importo para poder usar fuentes
+pygame.init()   #Inicio pygame
 
 #Voy a crear las propiedades de la ventana
-WIDTH, HEIGHT = 800, 600 #El tamaño de X e Y
-WIN = pygame.display.set_mode(((WIDTH, HEIGHT)))
+width, height = 800, 600 #El tamaño de X e Y
+WIN = pygame.display.set_mode(((width, height)))
 pygame.display.set_caption("Carpinchometro") #Seteo el titulo de la ventana
+
+#Creo el menu
+surface = pygame.display.set_mode((width, height))
+menu = pygame_menu.Menu("Bienvenido", 400, 300, theme=pygame_menu.themes.THEME_BLUE)
+
+menu.add.button("Salir", pygame_menu.events.EXIT)   #Agrego boton de salir
+menu.mainloop(surface)
 
 #Cargo las imagenes del personaje
 PLAYER = pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png"))
@@ -38,7 +46,7 @@ FONT_RED = (252, 3, 69)
 
 
 #Cargo imagen del background
-BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("images/background", "back.png")), (WIDTH, HEIGHT)) #Escalo la imagen del BG para que siempre se adapten a la pantalla
+BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("images/background", "back.png")), (width, height)) #Escalo la imagen del BG para que siempre se adapten a la pantalla
 #Clase del personaje
 class Character:
     def __init__(self, x, y, health = 100):
@@ -104,7 +112,7 @@ def main():
     wave_lenght = 1 #Tamaño de la ola
 
     player_vel = 5
-    player = Player( (WIDTH//2)-95, (HEIGHT - 210)) #Posiciono al personaje en X,Y (Si tiene 190px x 190x)
+    player = Player( (width//2)-95, (height - 210)) #Posiciono al personaje en X,Y (Si tiene 190px x 190x)
     
     clock = pygame.time.Clock()
 
@@ -117,7 +125,7 @@ def main():
         #Escribo el texto de la vida
         lives_label = main_font.render(f"Vidas: {lives}", 1, FONT_RED)
         level_label = main_font.render(f"Nivel: {level}", 1, FONT_RED)
-        WIN.blit(lives_label, (10, 10)), WIN.blit(level_label, (WIDTH - lives_label.get_width() - 10, 10))  #Ancho de la pantalla - ancho de palabra - 10
+        WIN.blit(lives_label, (10, 10)), WIN.blit(level_label, (width - lives_label.get_width() - 10, 10))  #Ancho de la pantalla - ancho de palabra - 10
 
         for enemy in enemies:
             enemy.draw(WIN)
@@ -126,7 +134,7 @@ def main():
 
         if lost:
             lost_label = lost_font.render("Te mató el carpincho", 1, FONT_RED)  #Texto si perdemos
-            WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))     #Posiciono el texto
+            WIN.blit(lost_label, (width/2 - lost_label.get_width()/2, 350))     #Posiciono el texto
 
         pygame.display.update() #Updatea la pantalla
 
@@ -152,7 +160,7 @@ def main():
                 #enemy_vel += 1
                 #wave_lenght += 1
 
-                enemy = Enemy(WIDTH, random.randrange(0,(HEIGHT - 380))) #Spawn del enemigo
+                enemy = Enemy(width, random.randrange(0,(height - 380))) #Spawn del enemigo
                 enemies.append(enemy)
 
             for event in pygame.event.get():
@@ -162,18 +170,18 @@ def main():
             keys = pygame.key.get_pressed() #Declaro la variable que detecta las teclas presionadas
             if keys[pygame.K_a] or keys[pygame.K_LEFT] and player.x - player_vel > 0: #Tecla a que va hacia la izquierda
                 player.x -= player_vel 
-            if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x +  player_vel + player.get_width() < WIDTH: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
+            if keys[pygame.K_d] or keys[pygame.K_RIGHT] and player.x +  player_vel + player.get_width() < width: #Derecha (Despues del and compruebo que el character no pase los bordes de las ventanas)
                 player.x += player_vel
             if keys[pygame.K_w] or keys[pygame.K_UP]: #Arriba
                 player.y -= player_vel
-            if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + player.get_height() + 15 < HEIGHT: #Abajo
+            if keys[pygame.K_s] or keys[pygame.K_DOWN] and player.y +  player_vel + player.get_height() + 15 < height: #Abajo
                 player.y += player_vel
 
             #Detectar si el jugador sale de la pantalla arriba
             if player.y - player_vel <= 0:
                 level += 1
-                player.x = (WIDTH//2)-95
-                player.y = HEIGHT - 210
+                player.x = (width//2)-95
+                player.y = height - 210
                 enemy_vel += 1
                 #wave_lenght += 1
 
@@ -184,8 +192,8 @@ def main():
                 #Si colisionas los objetos
                 if collide(enemy, player):
                     player.health -= 10
-                    player.x = (WIDTH//2)-95
-                    player.y = HEIGHT - 210
+                    player.x = (width//2)-95
+                    player.y = height - 210
                     enemies.remove(enemy)
                     if level > 0:
                         level -= 1
@@ -200,7 +208,7 @@ def main_menu():
     while run:
         WIN.blit(BACKGROUND, (0,0))
         title_label = title_font.render("Presiona un boton del mouse para iniciar...",1, FONT_RED)
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, HEIGHT/2))  #Posicion texto principal
+        WIN.blit(title_label, (width/2 - title_label.get_width()/2, height/2))  #Posicion texto principal
 
         pygame.display.update()
 
@@ -211,5 +219,4 @@ def main_menu():
                 main()
 
     pygame.quit()
-    
-main_menu() #Llamo al menu principal para iniciar el juego
+#main_menu() #Llamo al menu principal para iniciar el juego
