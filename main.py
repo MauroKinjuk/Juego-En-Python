@@ -9,6 +9,7 @@
 import pygame
 import os, time, random
 import pygame_menu #requiere instalar pygame_menu
+from support import import_folder
 
 from pygame import mixer
 
@@ -20,30 +21,11 @@ width, height = 800, 600 #El tamaño de X e Y
 WIN = pygame.display.set_mode(((width, height)))
 pygame.display.set_caption("Carpinchometro") #Seteo el titulo de la ventana
 
-#Creo el menu
-surface = pygame.display.set_mode((width, height))
-menu = pygame_menu.Menu("Bienvenido", 400, 300, theme=pygame_menu.themes.THEME_BLUE)
-
-menu.add.button("Salir", pygame_menu.events.EXIT)   #Agrego boton de salir
-menu.mainloop(surface)
-
 #Cargo las imagenes del personaje
-PLAYER = pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png"))
+PLAYER = pygame.image.load(os.path.join("images/carpincho/izquierda", "1.png"))
 
-#Cargo las imagenes del carpincho corriendo (190px x 190px)
-CARPI_1 = pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png"))
-#carpi = [
-#    pygame.image.load(os.path.join("images/carpincho", "carpincho-1.png")),
-#    pygame.image.load(os.path.join("images/carpincho", "carpincho-2.png")),
-#    pygame.image.load(os.path.join("images/carpincho", "carpincho-3.png")),
-#    pygame.image.load(os.path.join("images/carpincho", "carpincho-4.png")),
-#    pygame.image.load(os.path.join("images/carpincho", "carpincho-5.png"))
-#    ]
-
-carpi_move = False
 #Colores fuentes
 FONT_RED = (252, 3, 69)
-
 
 #Cargo imagen del background
 BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("images/background", "back.png")), (width, height)) #Escalo la imagen del BG para que siempre se adapten a la pantalla
@@ -87,11 +69,33 @@ class Enemy(Character): #Clase para los carpinchos
 
     def __init__(self, x, y, health=100):
         super().__init__(x, y, health)
-        self.character_img = CARPI_1
+        self.import_carpincho_assets()
+        self.frame_index = 0 #Variable para detectar el index de la animacion del carpincho
+        self.animation_speed = 0.15 #Velocidad de update de cada animacion
+        self.character_img = self.animations["izquierda"][self.frame_index]
         self.mask = pygame.mask.from_surface(self.character_img) #Mascara del carpincho
 
     def move(self, vel):
             self.x -= vel
+
+    #Def para importar la animacion del carpincho
+    def import_carpincho_assets(self):
+        carpincho_path = "images/carpincho/"    #Path del carpincho
+        self.animations = {"izquierda":[], "derecha":[]}    #Nombre de carpetas
+
+        for animation in self.animations.keys():
+            full_path = carpincho_path + animation  #Agrego el nombre de la animacion a la carpeta, ej: images/carpincho/ + izquierda
+            self.animations[animation] = import_folder(full_path)   #utilizo la funcion import_folder del archivo support.py
+
+    def animate(self):
+        animation = self.animations["izquierda"]
+
+        #Bucle dentro del index de imagenes
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(animation):  #Recorro el array de las animaciones, cuando llego al limite de imagenes
+            self.frame_index = 0                #Vuelvo el index a 0, para que empiece de nuevo el bucle
+
+        self.image = animation[int(self.frame_index)]
 
 #Def de colisiones
 def collide(obj1, obj2):
@@ -103,7 +107,7 @@ def main():
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
     level = 1   #Nivel
-    lives = 5   #Vida
+    lives = 2   #Vida
     main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
     lost_font = pygame.font.SysFont("comicsans", 60)    #Fuente de Muerte
 
@@ -143,7 +147,7 @@ def main():
             redraw_window() #Llamo a la funcion para updatear la pantalla
 
             #Detecta cuando la vida o vida del jugador es 0
-            if lives <= 0 or player.health <= 0:
+            if lives <= 0:
                 lost = True
                 lost_count += 1
 
@@ -155,11 +159,6 @@ def main():
                     continue
 
             if len(enemies) == 0:
-                #Comento esto, ya que puede ser util
-                #level += 1
-                #enemy_vel += 1
-                #wave_lenght += 1
-
                 enemy = Enemy(width, random.randrange(0,(height - 380))) #Spawn del enemigo
                 enemies.append(enemy)
 
@@ -178,7 +177,7 @@ def main():
                 player.y += player_vel
 
             #Detectar si el jugador sale de la pantalla arriba
-            if player.y - player_vel <= 0:
+            if player.y - player_vel <= -190:
                 level += 1
                 player.x = (width//2)-95
                 player.y = height - 210
@@ -191,7 +190,15 @@ def main():
 
                 #Si colisionas los objetos
                 if collide(enemy, player):
-                    player.health -= 10
+                    if player.health > 0:
+                        player.health -= 50
+                        if player.health == 0:
+                            lives -= 1
+                            player.health += 100
+                    else:
+                        lives -= 1
+                        player.health += 100
+
                     player.x = (width//2)-95
                     player.y = height - 210
                     enemies.remove(enemy)
@@ -219,4 +226,4 @@ def main_menu():
                 main()
 
     pygame.quit()
-#main_menu() #Llamo al menu principal para iniciar el juego
+main_menu() #Llamo al menu principal para iniciar el juego
