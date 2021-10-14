@@ -2,13 +2,13 @@
 #       TO DO:
 #   *Corregir spawn al azar de carpinchos
 #   *Agregar Menu  -----LISTO
-#   *Animacion carpincho    -----WORK IN PROGRESS
+#   *Animacion carpincho
 #   *Mas cosas
 #-----------------------------------------
 
 import pygame
 import os, time, random
-#import pygame_menu #requiere instalar pygame_menu
+import pygame_menu #requiere instalar pygame_menu
 from support import import_folder
 
 from pygame import mixer
@@ -188,7 +188,7 @@ def main():
             for enemy in enemies[:]:
                 enemy.move(enemy_vel)
 
-                #Si colisionas los enemigos
+                #Si colisionas los objetos
                 if collide(enemy, player):
                     if player.health > 0:
                         player.health -= 50
