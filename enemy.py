@@ -46,3 +46,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.is_animating = False
 
             self.image = self.sprites[int(self.current_sprite)]
+            
+            self.mask = pygame.mask.from_surface(self.image)
+
+        

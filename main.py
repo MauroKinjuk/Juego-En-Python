@@ -14,7 +14,8 @@ background = pygame.transform.scale(pygame.image.load("bg.png"), (screen_width, 
 pygame.display.set_caption("Carpinchometro")
 
 #Grupos de sprites
-moving_sprites = pygame.sprite.Group()
+player_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 
 def main():
     #Parametros basicos
@@ -32,11 +33,11 @@ def main():
 
     #Enemigo
     enemy = Enemy(screen_width, random.randrange(0, (screen_height - 190)))
-    moving_sprites.add(enemy)  #Para agregar el enemigo
+    enemy_group.add(enemy)  #Para agregar el enemigo
 
     #Coloco al jugador
     player = Player((screen_width // 2) - 95, (screen_height - 210))
-    moving_sprites.add(player)
+    player_group.add(player)
 
     #Colisiones
     #sprites_hits = pygame.sprite.spritecollide(player, enemy, True)
@@ -47,8 +48,12 @@ def main():
         screen.blit(background, (0,0))  #Background
 
         #Parametros de sprites
-        moving_sprites.draw(screen) #Hago que se dibuje el sprite
-        moving_sprites.update(0.2)  #Hago que el sprite se mueva a cierta velocidad
+        enemy_group.draw(screen)
+        player_group.draw(screen)
+        #moving_sprites.draw(screen) #Hago que se dibuje el sprite
+        #moving_sprites.update(0.2)  #Hago que el sprite se mueva a cierta velocidad
+        enemy_group.update(0.2)
+        player_group.update(0.2)
 
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
@@ -65,7 +70,7 @@ def main():
               
         for enemy in enemies[:]:
             enemy.animate() #llamo a la funcion que anima y mueve al enemigo
-
+            hits = pygame.sprite.groupcollide(player_group, enemy_group, False, True)  #Colision
 
             
 
