@@ -6,6 +6,8 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
 
         #Defino los sprites del carpincho
+        self.x = pos_x
+        self.y = pos_y
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
         self.sprites.append(pygame.image.load("carpincho/izquierda/1.png"))

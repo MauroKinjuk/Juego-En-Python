@@ -48,12 +48,16 @@ def main():
         screen.blit(background, (0,0))  #Background
 
         #Parametros de sprites
-        enemy_group.draw(screen)
-        player_group.draw(screen)
-        #moving_sprites.draw(screen) #Hago que se dibuje el sprite
-        #moving_sprites.update(0.2)  #Hago que el sprite se mueva a cierta velocidad
-        enemy_group.update(0.2)
+
+        #Update
         player_group.update(0.2)
+        #Dibujado
+        for enemy in enemies:
+            enemy_group.update(0.2)
+            enemy_group.draw(screen)
+
+        player_group.draw(screen)
+            
 
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
@@ -66,11 +70,15 @@ def main():
 
         #Spawn del enemigo
         if len (enemies) == 0:
-              enemies.append(enemy)
-              
+            enemies.append(enemy)
+
+        colision = pygame.sprite.spritecollide(player,enemy_group, False)
+
         for enemy in enemies[:]:
             enemy.animate() #llamo a la funcion que anima y mueve al enemigo
-            hits = pygame.sprite.groupcollide(player_group, enemy_group, False, True)  #Colision
+
+            if colision:
+                enemies.remove(enemy)
 
             
 
