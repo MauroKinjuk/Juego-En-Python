@@ -32,11 +32,11 @@ def main():
     lost_font = pygame.font.SysFont("comicsans", 60)    #Fuente de Muerte
 
     #Enemigo
-    enemy = Enemy(screen_width, random.randrange(0, (screen_height - 190)))
+    enemy = Enemy()
     enemy_group.add(enemy)  #Para agregar el enemigo
 
     #Coloco al jugador
-    player = Player((screen_width // 2) - 95, (screen_height - 210))
+    player = Player()
     player_group.add(player)
 
     #Colisiones
@@ -53,9 +53,9 @@ def main():
         player_group.update(0.2)
         #Dibujado
         for enemy in enemies:
-            enemy_group.update(0.2)
             enemy_group.draw(screen)
-
+            enemy_group.update(0.2)
+            
         player_group.draw(screen)
             
 
@@ -77,8 +77,8 @@ def main():
         for enemy in enemies[:]:
             enemy.animate() #llamo a la funcion que anima y mueve al enemigo
 
-            if colision:
-                enemies.remove(enemy)
+            #if colision:
+            #    enemies.remove(enemy)
 
             
 

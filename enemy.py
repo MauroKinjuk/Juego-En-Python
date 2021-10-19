@@ -1,13 +1,11 @@
-import pygame
+import pygame, random
 from random import randint
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
+    def __init__(self):
         super().__init__()
 
         #Defino los sprites del carpincho
-        self.x = pos_x
-        self.y = pos_y
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
         self.sprites.append(pygame.image.load("carpincho/izquierda/1.png"))
@@ -19,8 +17,10 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
         self.speed = randint(3,8)
 
+        #Dibuja el enemigo, y hace el spawn
         self.rect = self.image.get_rect()
-        self.rect.topleft = [pos_x, pos_y]
+        self.rect.x = 800
+        self.rect.y = random.randrange(0, (600 - 190))
 
     #Funcion que devuelve el tamaño de las imagenes
     def get_width(self):
@@ -48,7 +48,10 @@ class Enemy(pygame.sprite.Sprite):
                 self.is_animating = False
 
             self.image = self.sprites[int(self.current_sprite)]
-            
-            self.mask = pygame.mask.from_surface(self.image)
+
+        #Si el enemigo se va fuera de la pantalla
+        if self.rect.left <= (0-(self.image.get_width())):
+            self.rect.x = 800   #Cambiar a screen_width
+            self.rect.y = random.randrange(0, (600- (self.image.get_width())))   #Cambiar a #screen_hight
 
         

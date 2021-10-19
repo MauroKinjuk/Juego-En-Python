@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,x,y):
+    def __init__(self):
         super().__init__()
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
@@ -14,8 +14,10 @@ class Player(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
         self.speed = 3
 
+        #Dibuja el enemigo, y hace el spawn
         self.rect = self.image.get_rect()
-        self.rect.topleft = [x, y]
+        self.rect.x = (800 // 2) - 95
+        self.rect.y = 600 - 170
 
     #Funcion que devuelve el tamaño de las imagenes
     def get_width(self):
@@ -41,7 +43,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_UP]:   #Arriba
             self.animate()
             self.rect.y -= self.speed
-        if keys[pygame.K_DOWN] and self.rect.y + self.speed + self.get_height() < 600:    #Cambiar cuando tenga la pantalla
+        if keys[pygame.K_DOWN] and self.rect.y + self.speed + (self.get_height() - 20) < 600:    #Cambiar cuando tenga la pantalla
             self.animate()
             self.rect.y += self.speed
 
@@ -52,7 +54,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y - self.speed <= -190:    #Detecto cuando deja la pantalla
             #Lo mando de nuevo al inicio
             self.rect.x = (400 - 95)
-            self.rect.y = 600 - 210
+            self.rect.y = 600 - 170
 
     #Funcion update que actualiza el sprite
     def update(self, speed):
