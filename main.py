@@ -39,26 +39,33 @@ def main():
     player = Player()
     player_group.add(player)
 
-    #Colisiones
-    #sprites_hits = pygame.sprite.spritecollide(player, enemy, True)
-
-    while run:
-
+    #Metodo para refrescar la pantalla
+    def redraw_window():
         #Dibujo en pantalla
         screen.blit(background, (0,0))  #Background
 
-        #Parametros de sprites
+        #Defino y dibujo las palabras en pantalla
+        lives_label = main_font.render(f"Vidas: {hearths}", 1, (255,255,255))
+        level_label = main_font.render(f"Nivel: {hearths}", 1, (255,255,255))
+        screen.blit(lives_label,(10,10)), screen.blit(level_label, (screen_width - lives_label.get_width() - 10, 10))
 
-        #Update
-        player_group.update(0.2)
-        #Dibujado
+        #Agrego los enemigos
         for enemy in enemies:
             enemy_group.draw(screen)
             enemy_group.update(0.2)
-            
+            enemy.animate()
+        
+        #Agrego al jugador
+        player_group.update(0.2)
         player_group.draw(screen)
-            
 
+        #Refresco la pantalla
+        pygame.display.update()
+
+    while run:
+        clock.tick(FPS)
+        redraw_window()
+            
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -71,18 +78,5 @@ def main():
         #Spawn del enemigo
         if len (enemies) == 0:
             enemies.append(enemy)
-
-        colision = pygame.sprite.spritecollide(player,enemy_group, False)
-
-        for enemy in enemies[:]:
-            enemy.animate() #llamo a la funcion que anima y mueve al enemigo
-
-            #if colision:
-            #    enemies.remove(enemy)
-
-            
-
-        pygame.display.update()
-        clock.tick(FPS)
 
 main()
