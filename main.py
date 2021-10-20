@@ -1,4 +1,4 @@
-import pygame, sys, random, os
+import pygame, sys
 from enemy import *
 from player import *
 
@@ -17,6 +17,12 @@ pygame.display.set_caption("Carpinchometro")
 player_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 
+#Defino y añado el grupo de enemigos y jugador
+player = Player()
+player_group.add(player)
+enemy = Enemy()
+enemy_group.add(enemy)
+
 def main():
     #Parametros basicos
     run = True  #Mantiene la ventana abierta mientras sea True
@@ -24,20 +30,9 @@ def main():
     level = 1
     hearths = 2
 
-    #Parametros enemigo
-    enemies = []
-
     #Fuentes
     main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
     lost_font = pygame.font.SysFont("comicsans", 60)    #Fuente de Muerte
-
-    #Enemigo
-    enemy = Enemy()
-    enemy_group.add(enemy)  #Para agregar el enemigo
-
-    #Coloco al jugador
-    player = Player()
-    player_group.add(player)
 
     #Metodo para refrescar la pantalla
     def redraw_window():
@@ -46,14 +41,12 @@ def main():
 
         #Defino y dibujo las palabras en pantalla
         lives_label = main_font.render(f"Vidas: {hearths}", 1, (255,255,255))
-        level_label = main_font.render(f"Nivel: {hearths}", 1, (255,255,255))
+        level_label = main_font.render(f"Nivel: {level}", 1, (255,255,255))
         screen.blit(lives_label,(10,10)), screen.blit(level_label, (screen_width - lives_label.get_width() - 10, 10))
 
         #Agrego los enemigos
-        for enemy in enemies:
-            enemy_group.draw(screen)
-            enemy_group.update(0.2)
-            enemy.animate()
+        enemy_group.update(0.15)
+        enemy_group.draw(screen)
         
         #Agrego al jugador
         player_group.update(0.2)
@@ -65,18 +58,27 @@ def main():
     while run:
         clock.tick(FPS)
         redraw_window()
-            
-        #Detecto cuando se cierra la pantalla
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
 
         #Detecto cuando se presionan las teclas del jugador
         player.get_input()
 
-        #Spawn del enemigo
-        if len (enemies) == 0:
-            enemies.append(enemy)
+        #Detecto cuando se cierra la pantalla
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()    
+
+        #Agrego colisiones
+        colision = pygame.sprite.spritecollide(player, enemy_group, False, pygame.sprite.collide_mask)
+
+        for i in colision:
+            if level > 0:
+                level -= 1
+            enemy_group.remove(i)   #Remuevo i del grupo de enemigos
+            new_enemy = Enemy()     #Nueva variable para spawn de enemigos
+            enemy_group.add(new_enemy)  #Agrego el nuevo spawn al grupo de enemigos
+            enemy_group.update(0.15)    #Le hago un update
+
+
 
 main()

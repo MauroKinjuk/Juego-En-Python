@@ -14,7 +14,7 @@ class Enemy(pygame.sprite.Sprite):
         self.sprites.append(pygame.image.load("carpincho/izquierda/4.png"))
         self.sprites.append(pygame.image.load("carpincho/izquierda/5.png"))
         self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
+        self.image = self.sprites[self.current_sprite].convert_alpha()
         self.speed = randint(3,8)
 
         #Dibuja el enemigo, y hace el spawn
@@ -30,8 +30,7 @@ class Enemy(pygame.sprite.Sprite):
         return self.image.get_height()
 
     def move(self):
-        self.rect.x -= self.speed
-        
+        self.rect.x -= self.speed  
 
     #Funcion que cambia cuando el carpincho se mueve o no
     def animate(self):
@@ -54,4 +53,7 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.x = 800   #Cambiar a screen_width
             self.rect.y = random.randrange(0, (600- (self.image.get_width())))   #Cambiar a #screen_hight
 
+        self.mask = pygame.mask.from_surface(self.image)
+
+        self.animate()
         

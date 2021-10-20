@@ -54,7 +54,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.y - self.speed <= -190:    #Detecto cuando deja la pantalla
             #Lo mando de nuevo al inicio
             self.rect.x = (400 - 95)
-            self.rect.y = 600 - 170
+            self.rect.y = 600 - 100
 
     #Funcion update que actualiza el sprite
     def update(self, speed):
@@ -67,4 +67,4 @@ class Player(pygame.sprite.Sprite):
 
             self.image = self.sprites[int(self.current_sprite)]
 
-            self.mask = pygame.mask.from_surface(self.image)
+        self.mask = pygame.mask.from_surface(self.image)
