@@ -2,7 +2,7 @@ import pygame, random
 from random import randint
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, speed):
         super().__init__()
 
         #Defino los sprites del carpincho
@@ -15,7 +15,7 @@ class Enemy(pygame.sprite.Sprite):
         self.sprites.append(pygame.image.load("carpincho/izquierda/5.png"))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite].convert_alpha()
-        self.speed = randint(3,8)
+        self.speed = speed
 
         #Dibuja el enemigo, y hace el spawn
         self.rect = self.image.get_rect()

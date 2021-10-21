@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, health):
         super().__init__()
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.speed = 3
+        self.health = health
 
         #Dibuja el enemigo, y hace el spawn
         self.rect = self.image.get_rect()

@@ -17,18 +17,21 @@ pygame.display.set_caption("Carpinchometro")
 player_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 
-#Defino y añado el grupo de enemigos y jugador
-player = Player()
-player_group.add(player)
-enemy = Enemy()
-enemy_group.add(enemy)
-
 def main():
     #Parametros basicos
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
-    level = 1
-    hearths = 2
+    level = 1   #Nivel
+    hearths = 2 #Vidas
+    health_player = 100 #Vida jugador
+
+    speed_enemy = 3
+
+    #Defino y añado el grupo de enemigos y jugador
+    player = Player(health_player)
+    player_group.add(player)
+    enemy = Enemy(speed_enemy)
+    enemy_group.add(enemy)
 
     #Fuentes
     main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
@@ -65,17 +68,34 @@ def main():
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()    
+                pygame.quit()    
 
         #Agrego colisiones
         colision = pygame.sprite.spritecollide(player, enemy_group, False, pygame.sprite.collide_mask)
 
         for i in colision:
+
+            #Si el nivel es mayor a 0
             if level > 0:
-                level -= 1
+                level -= 1  #Resto 1 nivel
+                if speed_enemy > 3: #Si la velocidad del enemigo es mayor a 3
+                    speed_enemy -= 1
+
+            if health_player > 0:
+                    health_player -= 50
+                    if health_player == 0:
+                        hearths -= 1
+                        health_player = 100
+            else:
+                hearths -= 1
+                health_player = 100
+                if hearths <= 0:
+                    pygame.quit()
+            
+            print (health_player)
+
             enemy_group.remove(i)   #Remuevo i del grupo de enemigos
-            new_enemy = Enemy()     #Nueva variable para spawn de enemigos
+            new_enemy = Enemy(speed_enemy)     #Nueva variable para spawn de enemigos
             enemy_group.add(new_enemy)  #Agrego el nuevo spawn al grupo de enemigos
             enemy_group.update(0.15)    #Le hago un update
 
