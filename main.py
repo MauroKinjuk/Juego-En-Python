@@ -1,6 +1,7 @@
-import pygame, sys
-from enemy import *
-from player import *
+import pygame
+from enemy import Enemy
+from player import Player
+from logic import check_collision, check_level
 
 #Inicializador
 pygame.init()
@@ -21,16 +22,11 @@ def main():
     #Parametros basicos
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
-    level = 1   #Nivel
-    hearths = 2 #Vidas
-    health_player = 100 #Vida jugador
-
-    speed_enemy = 3
 
     #Defino y añado el grupo de enemigos y jugador
-    player = Player(health_player)
+    player = Player()
     player_group.add(player)
-    enemy = Enemy(speed_enemy)
+    enemy = Enemy()
     enemy_group.add(enemy)
 
     #Fuentes
@@ -43,8 +39,8 @@ def main():
         screen.blit(background, (0,0))  #Background
 
         #Defino y dibujo las palabras en pantalla
-        lives_label = main_font.render(f"Vidas: {hearths}", 1, (255,255,255))
-        level_label = main_font.render(f"Nivel: {level}", 1, (255,255,255))
+        lives_label = main_font.render(f"Vidas: {player.lives}", 1, (255,255,255))
+        level_label = main_font.render(f"Nivel: {player.level}", 1, (255,255,255))
         screen.blit(lives_label,(10,10)), screen.blit(level_label, (screen_width - lives_label.get_width() - 10, 10))
 
         #Agrego los enemigos
@@ -70,35 +66,8 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()    
 
-        #Agrego colisiones
-        colision = pygame.sprite.spritecollide(player, enemy_group, False, pygame.sprite.collide_mask)
-
-        for i in colision:
-
-            #Si el nivel es mayor a 0
-            if level > 0:
-                level -= 1  #Resto 1 nivel
-                if speed_enemy > 3: #Si la velocidad del enemigo es mayor a 3
-                    speed_enemy -= 1
-
-            if health_player > 0:
-                    health_player -= 50
-                    if health_player == 0:
-                        hearths -= 1
-                        health_player = 100
-            else:
-                hearths -= 1
-                health_player = 100
-                if hearths <= 0:
-                    pygame.quit()
-            
-            print (health_player)
-
-            enemy_group.remove(i)   #Remuevo i del grupo de enemigos
-            new_enemy = Enemy(speed_enemy)     #Nueva variable para spawn de enemigos
-            enemy_group.add(new_enemy)  #Agrego el nuevo spawn al grupo de enemigos
-            enemy_group.update(0.15)    #Le hago un update
-
-
+        #Checkeo las colisiones
+        check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
+        check_level(player, enemy_group)    #Compruebo cuando el jugador pasa la pantalla
 
 main()
