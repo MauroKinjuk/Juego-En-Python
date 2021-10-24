@@ -33,6 +33,11 @@ class Player(pygame.sprite.Sprite):
     def animate(self):
         self.is_animating = True
 
+    #Funcion que agrega la barra de vida
+    def health_bar(self, screen):
+        pygame.draw.rect(screen, (255,0,0), (self.rect.x, self.rect.y + self.get_height() - 10, self.get_width(), 10))
+        pygame.draw.rect(screen, (0,255,0), (self.rect.x, self.rect.y + self.get_height() - 10, self.get_width() * (self.health/100), 10))
+
     #Funcion para obtener las teclas presionadas
     def get_input(self):
         keys = pygame.key.get_pressed()
@@ -60,7 +65,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = 600 - 100
 
     #Funcion update que actualiza el sprite
-    def update(self, speed):
+    def update(self, speed, screen):
         if self.is_animating == True:
             self.current_sprite += speed
             
@@ -71,3 +76,5 @@ class Player(pygame.sprite.Sprite):
             self.image = self.sprites[int(self.current_sprite)]
 
         self.mask = pygame.mask.from_surface(self.image)
+        #Dibujo la barra de vida
+        self.health_bar(screen)

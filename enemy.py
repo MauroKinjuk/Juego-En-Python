@@ -15,7 +15,7 @@ class Enemy(pygame.sprite.Sprite):
         self.sprites.append(pygame.image.load("carpincho/izquierda/5.png"))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite].convert_alpha()
-        self.speed = 3  #Velocidad standard
+        self.speed = 1  #Velocidad standard
 
         #Dibuja el enemigo, y hace el spawn
         self.rect = self.image.get_rect()

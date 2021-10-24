@@ -18,24 +18,39 @@ def check_collision(player, enemy_group):
             sys.exit()  #Se cierra el juego
 
         player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
-        player.rect.y = 600 - 170   
+        player.rect.y = 600 - 170
+        #Le resto un nivel al jugador
+        if player.level >= 1:
+            player.level -= 1
 
         enemy_group.empty()   #Se remueve el enemigo
         new_enemy = Enemy()    #Se crea un nuevo enemigo
         enemy_group.add(new_enemy)  #Se agrega el nuevo enemigo al grupo de enemigos
-        enemy_group.update(0.15)    #Se actualiza el grupo de enemigos
+
+        #Cambio la velocidad del enemigo
+        for enemy in enemy_group:
+            if player.level > 0:
+                enemy.speed = player.level
+            else:
+                enemy.speed = 1
 
 #Funcion que detecta cuando el jugador se va de la pantalla, y aumenta el nivel
 def check_level(player, enemy_group):
-    if player.rect.y <= 0-150:  #Si el jugador se va de la pantalla
-        #Coloco al jugador en su spawn
-        player.rect.x = (800 // 2) - 95
-        player.rect.y = 600 - 170  
-        #Aumento el nivel
-        player.level += 1
 
+    #Si el jugador se va de la pantalla
+    if player.rect.y <= 0-150:
         #Remuevo a todos los enemigos y los vuelvo a spawnear
         enemy_group.empty()
         new_enemy = Enemy()
         enemy_group.add(new_enemy)
-        enemy_group.update(0.15)
+        
+        #Cambio la velocidad del enemigo
+        for enemy in enemy_group:
+            enemy.speed = player.level + 1
+
+        #Coloco al jugador en su spawn
+        player.rect.x = (800 // 2) - 95
+        player.rect.y = 600 - 170  
+        #Aumento el nivel y la vida
+        player.health = 100
+        player.level += 1

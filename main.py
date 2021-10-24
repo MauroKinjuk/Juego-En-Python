@@ -48,7 +48,7 @@ def main():
         enemy_group.draw(screen)
         
         #Agrego al jugador
-        player_group.update(0.2)
+        player_group.update(0.2, screen)
         player_group.draw(screen)
 
         #Refresco la pantalla
@@ -64,7 +64,7 @@ def main():
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()    
+                run = False
 
         #Checkeo las colisiones
         check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
