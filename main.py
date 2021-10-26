@@ -11,9 +11,9 @@ clock = pygame.time.Clock()
 screen_width = 800  #Ancho
 screen_height = 600 #Alto
 screen = pygame.display.set_mode((screen_width, screen_height)) 
-carpincho = pygame.image.load("carpincho/izquierda/1.png")
+carpincho = pygame.image.load("carpincho/izquierda/1.png") #Agrego imagen para la pantalla de game over
 background = pygame.transform.scale(pygame.image.load("bg.png"), (screen_width, screen_height)) #Seteo el fondo, escalandolo al tamaño de la pantalla
-pygame.display.set_caption("Carpinchometro")
+pygame.display.set_caption("Carpinchometro") 
 
 #Grupos de sprites
 player_group = pygame.sprite.Group()
@@ -69,7 +69,7 @@ def main():
 
     while run:
         clock.tick(FPS)
-        if (player.lives == 0):
+        if (player.lives == 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
             juego_activo = False
         if juego_activo == True:
             redraw_window()
@@ -84,14 +84,15 @@ def main():
         else: 
             gameover_window() #Muestro la pantalla de game over
             if event.type == pygame.KEYDOWN: 
-                juego_activo = True
+                juego_activo = True 
+                #Reinicio todos los valores
                 player.lives = 2
                 player.level = 0
                 player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
                 player.rect.y = 600 - 170
-                enemy_group.empty()
+                enemy_group.empty() #Elimino enemigos para evitar que el juego empieze con enemigos ya en el medio de la pantalla
                 new_enemy = Enemy()
-                enemy_group.add(new_enemy)
+                enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
 
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
