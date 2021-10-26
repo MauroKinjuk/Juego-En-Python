@@ -13,9 +13,6 @@ def check_collision(player, enemy_group):
             if player.health == 0:  #Si la vida es 0
                 player.health = 100 #Vuelvo a poner la vida a 100
                 player.lives -= 1  #Le resto una vida al jugador
-        
-        if player.lives == 0:  #Si el jugador no tiene corazones
-            sys.exit()  #Se cierra el juego
 
         player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
         player.rect.y = 600 - 170
