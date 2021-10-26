@@ -11,8 +11,9 @@ clock = pygame.time.Clock()
 screen_width = 800  #Ancho
 screen_height = 600 #Alto
 screen = pygame.display.set_mode((screen_width, screen_height)) 
+carpincho = pygame.image.load("carpincho/izquierda/1.png") #Agrego imagen para la pantalla de game over
 background = pygame.transform.scale(pygame.image.load("bg.png"), (screen_width, screen_height)) #Seteo el fondo, escalandolo al tamaño de la pantalla
-pygame.display.set_caption("Carpinchometro")
+pygame.display.set_caption("Carpinchometro") 
 
 #Grupos de sprites
 player_group = pygame.sprite.Group()
@@ -22,7 +23,7 @@ def main():
     #Parametros basicos
     run = True  #Mantiene la ventana abierta mientras sea True
     FPS = 60    #Seteo la velocidad de fotogramas
-
+    juego_activo = True
     #Defino y añado el grupo de enemigos y jugador
     player = Player()
     player_group.add(player)
@@ -54,20 +55,47 @@ def main():
         #Refresco la pantalla
         pygame.display.update()
 
+    def gameover_window():
+        #Dibujo en pantalla
+        screen.blit(background, (0,0)) #Fijo el fondo
+
+        death_label = lost_font.render("No has podido evitar al carpincho",1,(30,30,30)) #Muestro mensaje de muerte
+        score_label = lost_font.render(f"Has llegado al nivel: {player.level+1}",1,(30,30,30)) #Muestro hasta que nivel llego el jugador
+        restart_label = lost_font.render("Toca cualquier flecha para reiniciar",1,(30,30,30)) #Muestro instrucciones para reinicio
+        screen.blit(carpincho,(300,500))
+        screen.blit(death_label,(50,screen_height // 2-100)), screen.blit(score_label,(180,screen_height//2-50)), screen.blit(restart_label,(30,screen_height//2))
+        #Refresco la pantalla
+        pygame.display.update()
+
     while run:
         clock.tick(FPS)
-        redraw_window()
+        if (player.lives == 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
+            juego_activo = False
+        if juego_activo == True:
+            redraw_window()
 
-        #Detecto cuando se presionan las teclas del jugador
-        player.get_input()
+            #Detecto cuando se presionan las teclas del jugador
+            player.get_input()
+
+            #Checkeo las colisiones
+            check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
+            check_level(player, enemy_group)    #Compruebo cuando el jugador pasa la pantalla
+
+        else: 
+            gameover_window() #Muestro la pantalla de game over
+            if event.type == pygame.KEYDOWN: 
+                juego_activo = True 
+                #Reinicio todos los valores
+                player.lives = 2
+                player.level = 0
+                player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
+                player.rect.y = 600 - 170
+                enemy_group.empty() #Elimino enemigos para evitar que el juego empieze con enemigos ya en el medio de la pantalla
+                new_enemy = Enemy()
+                enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
 
         #Detecto cuando se cierra la pantalla
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
-        #Checkeo las colisiones
-        check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
-        check_level(player, enemy_group)    #Compruebo cuando el jugador pasa la pantalla
-
 main()
