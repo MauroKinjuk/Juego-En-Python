@@ -23,6 +23,7 @@ class MainMenu(Menu):   #clase de menu principal que hereda las funciones de la 
         self.startx, self.starty = self.mid_w, self.mid_h -10  #posicion de la variable "Start"
         self.controlx, self.controly = self.mid_w, self.mid_h + 30  #posicion de la variable "Control"
         self.soundx, self.soundy = self.mid_w, self.mid_h + 70  #posicion de la variable "sound"
+        self.outx, self.outy = self.mid_w, self.mid_h + 110  #posicion de la variable "out"
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)  #Posicion inicial del cursor
 
     def display_menu(self): #funcion para mostrar el menu
@@ -38,9 +39,9 @@ class MainMenu(Menu):   #clase de menu principal que hereda las funciones de la 
                 self.game.draw_text("Sonido: si", 30, self.soundx, self.soundy)    #escribo "sound: Si"
             elif not self.game.sound:   #Si el sonido esta desactivado 
                 self.game.draw_text("Sonido: no", 30, self.soundx, self.soundy)    #escribo "sound: no"
+            self.game.draw_text("Salir", 30, self.outx, self.outy)    #escribo "Salir"
             self.draw_cursor()  #Dibujamos el cursoor
             self.blit_screen()  #mantenemos actualizada la pantalla
-
 
     def move_cursor(self):  #funcion que define el movimiento del cursor
         if self.game.DOWN_KEY:  #si se presiona la tecla hacia abajo
@@ -51,18 +52,24 @@ class MainMenu(Menu):   #clase de menu principal que hereda las funciones de la 
                 self.cursor_rect.midtop = (self.soundx + self.offset, self.soundy)  #Muevo el cursor abajo
                 self.state = 'Sonido'  #actualizo la variable de estado a Sonido
             elif self.state == 'Sonido':   #si estamos parados en "Sonido"
-                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)  #Muevo el cursor abajo
+                self.cursor_rect.midtop = (self.outx + self.offset, self.outy)  #Muevo el cursor abajo
+                self.state = 'Out'    #actualizo la variable de estado a Out
+            elif self.state == 'Out':   #si estamos parados en "Out"
+                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)  #Muevo el cursor arriba de todo
                 self.state = 'Comenzar'    #actualizo la variable de estado a Comenzar
         elif self.game.UP_KEY:  #si se presiona la tecla hacia arriba
             if self.state == 'Comenzar':   #si estamos parados en "Comenzar"
-                self.cursor_rect.midtop = (self.soundx + self.offset, self.soundy)  #Muevo el cursor arriba
-                self.state = 'Sonido'  #actualizo la variable de estado a Sonido
+                self.cursor_rect.midtop = (self.outx + self.offset, self.outy)  #Muevo el cursor abajo de todo
+                self.state = 'Out'  #actualizo la variable de estado a Out
             elif self.state == 'Controles':   #si estamos parados en "Opciones"
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)  #Muevo el cursor arriba
                 self.state = 'Comenzar'    #actualizo la variable de estado a Comenzar
             elif self.state == 'Sonido':   #si estamos parados en "Sonido"
                 self.cursor_rect.midtop = (self.controlx + self.offset, self.controly)  #Muevo el cursor arriba
                 self.state = 'Controles'  #actualizo la variable de estado a Opciones
+            elif self.state == 'Out':   #si estamos parados en "Out"
+                self.cursor_rect.midtop = (self.soundx + self.offset, self.soundy)  #Muevo el cursor arriba
+                self.state = 'Sonido'  #actualizo la variable de estado a Sonido
 
     def check_input(self):  #funcion que cambia el estado de acuerdo con que elijamos en el menu
         self.move_cursor()  #llamo a la funcion de movimiento del cursor
@@ -76,6 +83,8 @@ class MainMenu(Menu):   #clase de menu principal que hereda las funciones de la 
                     self.game.sound = False #Desactivo sonido
                 elif not self.game.sound:   #Si el sonido esta desactivado 
                     self.game.sound = True  #Activo sonido
+            elif self.state == 'Out':   #si la variable de estado es Out
+                self.game.running = False
             self.run_display = False    #la funcion display_menu va a parar
 
 class ControlMenu(Menu):

@@ -100,9 +100,9 @@ def main():
                     enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
 
             #Detecto cuando se cierra la pantalla
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    g.running = False
-
+            for event in pygame.event.get():  
+                if event.type == pygame.QUIT:  
+                    g.running, g.playing = False, False  
+                    g.curr_menu.run_display = False 
             
 main()
