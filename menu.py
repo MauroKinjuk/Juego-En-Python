@@ -115,8 +115,10 @@ class ControlMenu(Menu):
                 self.cursor_rect.midtop = (self.diestrox + self.offset, self.diestroy)  #muevo el cursor a diestro
         elif self.game.START_KEY:   #si tocamos la tecla enter 
             if self.state == 'Diestro': #si la variable de estado esta en diestro
-                pass
+                self.game.curr_menu = self.game.main_menu   #volvemos al menu principal
+                self.run_display = False    #la variable para el bucle de este menu pasa a false
             elif self.state == 'Zurdo': #si la variable de estado esta en zurdo
-                pass
+                self.game.curr_menu = self.game.main_menu   #volvemos al menu principal
+                self.run_display = False    #la variable para el bucle de este menu pasa a false
                 
 

@@ -19,6 +19,7 @@ class Game():   #
         self.control = ControlMenu(self)    #Creamos una variable de menu de controles para acceder a la clase ControlMenu
         self.curr_menu = self.main_menu #creamos una variable de menu actual y lo igualamos al menu principal
 
+#todo BORRAR ESTO/////////////////////////////////////////////////////////////////////////
     def game_loop(self):    #funcion de implementacion
         while self.playing: #mientras se este jugando el juego
             self.check_events() #llamamos a la funcion de interaccion con el teclado
@@ -29,6 +30,7 @@ class Game():   #
             self.window.blit(self.display, (0,0))   #reseteo el lienzo para que no se superponga
             pygame.display.update() #refresco de la imagen en la ventana
             self.reset_keys()   #funcion que resetea las entradas por teclado
+#///////////////////////////////////////////////////////////////////////////////////////////
 
     def check_events(self): #funcion de interaccion con las teclas
         for event in pygame.event.get():  #bucle  
