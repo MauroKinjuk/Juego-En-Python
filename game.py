@@ -25,10 +25,6 @@ class Game():   #
             self.check_events() #llamamos a la funcion de interaccion con el teclado
             if self.START_KEY:  #si se presiona la tecla enter
                 self.playing= False #la variable de juego pasara a false
-            self.display.fill(self.BLACK)   #ponemos el fondo del lienzo color negro
-            self.draw_text('Gracias por jugar :)', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)    #llamo a la funcion que muestra el texto en pantalla
-            self.window.blit(self.display, (0,0))   #reseteo el lienzo para que no se superponga
-            pygame.display.update() #refresco de la imagen en la ventana
             self.reset_keys()   #funcion que resetea las entradas por teclado
 #///////////////////////////////////////////////////////////////////////////////////////////
 
