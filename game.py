@@ -14,19 +14,11 @@ class Game():   #
         self.font_name = pygame.font.get_default_font() #definimos una variable con la fuente por defecto
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255) #colores negro y blanco
         self.sound = True
+        self.diestro, self.zurdo = True, False
         
         self.main_menu = MainMenu(self) #Creamos una variable de menu principal para para acceder a la clase MainMenu
         self.control = ControlMenu(self)    #Creamos una variable de menu de controles para acceder a la clase ControlMenu
         self.curr_menu = self.main_menu #creamos una variable de menu actual y lo igualamos al menu principal
-
-#todo BORRAR ESTO/////////////////////////////////////////////////////////////////////////
-    def game_loop(self):    #funcion de implementacion
-        while self.playing: #mientras se este jugando el juego
-            self.check_events() #llamamos a la funcion de interaccion con el teclado
-            if self.START_KEY:  #si se presiona la tecla enter
-                self.playing= False #la variable de juego pasara a false
-            self.reset_keys()   #funcion que resetea las entradas por teclado
-#///////////////////////////////////////////////////////////////////////////////////////////
 
     def check_events(self): #funcion de interaccion con las teclas
         for event in pygame.event.get():  #bucle  

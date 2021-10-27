@@ -41,7 +41,6 @@ class Player(pygame.sprite.Sprite):
     #Funcion para obtener las teclas presionadas
     def get_input(self):
         keys = pygame.key.get_pressed()
-
         if keys[pygame.K_LEFT] and self.rect.x - self.speed > 0:    #Izquierda
             self.animate()
             self.rect.x -= self.speed
@@ -54,7 +53,23 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_DOWN] and self.rect.y + self.speed + (self.get_height() - 20) < 600:    #Cambiar cuando tenga la pantalla
             self.animate()
             self.rect.y += self.speed
+        self.player_level()
 
+    #Funcion para obtener las teclas presionadas
+    def get_input_wasd(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and self.rect.x - self.speed > 0:    #Izquierda
+            self.animate()
+            self.rect.x -= self.speed
+        if keys[pygame.K_d] and self.rect.x - self.speed < 600: #Cambiar el 600 para cuando tenga la pantalla
+            self.animate()
+            self.rect.x += self.speed
+        if keys[pygame.K_w]:   #Arriba
+            self.animate()
+            self.rect.y -= self.speed
+        if keys[pygame.K_s] and self.rect.y + self.speed + (self.get_height() - 20) < 600:    #Cambiar cuando tenga la pantalla
+            self.animate()
+            self.rect.y += self.speed
         self.player_level()
 
     #Funcion que detecta cuando el jugador pasa la pantalla de arriba

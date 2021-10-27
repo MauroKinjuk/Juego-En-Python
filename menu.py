@@ -9,7 +9,7 @@ class Menu():   #creo una clase y la llamo menu
         self.offset = - 100 #posicionamos el cursor a la izquierda del texto
 
     def draw_cursor(self):  #funcion para darle forma al cursor
-        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)    #reutilizamos la funcion para darle forma al texto 
+        self.game.draw_text('X', 15, self.cursor_rect.x, self.cursor_rect.y)    #reutilizamos la funcion para darle forma al texto 
 
     def blit_screen(self):  #funcion de reset de lienzo ventana y teclas
         self.game.window.blit(self.game.display, (0, 0))    #reseteo el lienzo para que no se superponga
@@ -115,9 +115,13 @@ class ControlMenu(Menu):
                 self.cursor_rect.midtop = (self.diestrox + self.offset, self.diestroy)  #muevo el cursor a diestro
         elif self.game.START_KEY:   #si tocamos la tecla enter 
             if self.state == 'Diestro': #si la variable de estado esta en diestro
+                self.game.diestro = True    #paso la variable de controles para diestro a True
+                self.game.zurdo = False    #paso la variable de controles para zurdo a False
                 self.game.curr_menu = self.game.main_menu   #volvemos al menu principal
                 self.run_display = False    #la variable para el bucle de este menu pasa a false
             elif self.state == 'Zurdo': #si la variable de estado esta en zurdo
+                self.game.zurdo = True    #paso la variable de controles para zurdo a True
+                self.game.diestro = False    #paso la variable de controles para diestro a False
                 self.game.curr_menu = self.game.main_menu   #volvemos al menu principal
                 self.run_display = False    #la variable para el bucle de este menu pasa a false
                 

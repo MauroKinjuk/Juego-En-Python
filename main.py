@@ -68,6 +68,8 @@ def main():
         #Refresco la pantalla
         pygame.display.update()
 
+    #main
+    #TODO: si se agrega sonido hacer que dependa de la variable g.sound (boolean)
     while g.running:
         clock.tick(FPS)
         g.curr_menu.display_menu()  #despliego el menu
@@ -76,7 +78,10 @@ def main():
             redraw_window()
 
             #Detecto cuando se presionan las teclas del jugador
-            player.get_input()
+            if(g.diestro):
+                player.get_input()
+            if(g.zurdo):
+                player.get_input_wasd()
 
             #Checkeo las colisiones
             check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
