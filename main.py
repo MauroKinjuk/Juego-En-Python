@@ -8,13 +8,11 @@ from game import Game   #importamos la clase Game del archivo game
 #Inicializador
 pygame.init()
 clock = pygame.time.Clock()
+g = Game()  #creamos una variable para inicializar la clase Game
 
 #Pantalla del juego
-screen_width = 800  #Ancho
-screen_height = 600 #Alto
-screen = pygame.display.set_mode((screen_width, screen_height)) 
 carpincho = pygame.image.load("carpincho/izquierda/1.png") #Agrego imagen para la pantalla de game over
-background = pygame.transform.scale(pygame.image.load("bg.png"), (screen_width, screen_height)) #Seteo el fondo, escalandolo al tamaño de la pantalla
+background = pygame.transform.scale(pygame.image.load("bg.png"), (g.DISPLAY_W, g.DISPLAY_H)) #Seteo el fondo, escalandolo al tamaño de la pantalla
 pygame.display.set_caption("Carpinchometro") 
 
 #Grupos de sprites
@@ -29,7 +27,6 @@ def main():
     player_group.add(player)
     enemy = Enemy()
     enemy_group.add(enemy)
-    g = Game()  #creamos una variable para inicializar la clase Game
 
     #Fuentes
     main_font = pygame.font.SysFont("comicsans", 50)    #Fuente Principal
@@ -38,33 +35,32 @@ def main():
     #Metodo para refrescar la pantalla
     def redraw_window():
         #Dibujo en pantalla
-        screen.blit(background, (0,0))  #Background
+        g.window.blit(background, (0,0))  #Background
 
         #Defino y dibujo las palabras en pantalla
         lives_label = main_font.render(f"Vidas: {player.lives}", 1, (255,255,255))
         level_label = main_font.render(f"Nivel: {player.level}", 1, (255,255,255))
-        screen.blit(lives_label,(10,10)), screen.blit(level_label, (screen_width - lives_label.get_width() - 10, 10))
+        g.window.blit(lives_label,(10,10)), g.window.blit(level_label, (g.DISPLAY_W - lives_label.get_width() - 10, 10))
 
         #Agrego los enemigos
         enemy_group.update(0.15)
-        enemy_group.draw(screen)
+        enemy_group.draw(g.window)
         
         #Agrego al jugador
-        player_group.update(0.2, screen)
-        player_group.draw(screen)
+        player_group.update(0.2, g.window)
+        player_group.draw(g.window)
 
         #Refresco la pantalla
         pygame.display.update()
 
     def gameover_window():
         #Dibujo en pantalla
-        screen.blit(background, (0,0)) #Fijo el fondo
-
+        g.window.blit(background, (0,0)) #Fijo el fondo
         death_label = lost_font.render("No has podido evitar al carpincho",1,(30,30,30)) #Muestro mensaje de muerte
         score_label = lost_font.render(f"Has llegado al nivel: {player.level+1}",1,(30,30,30)) #Muestro hasta que nivel llego el jugador
         restart_label = lost_font.render("Toca cualquier flecha para reiniciar",1,(30,30,30)) #Muestro instrucciones para reinicio
-        screen.blit(carpincho,(300,500))
-        screen.blit(death_label,(50,screen_height // 2-100)), screen.blit(score_label,(180,screen_height//2-50)), screen.blit(restart_label,(30,screen_height//2))
+        g.window.blit(carpincho,(300,500))
+        g.window.blit(death_label,(50,g.DISPLAY_H // 2-100)), g.window.blit(score_label,(180,g.DISPLAY_H//2-50)), g.window.blit(restart_label,(30,g.DISPLAY_H//2))
         #Refresco la pantalla
         pygame.display.update()
 
