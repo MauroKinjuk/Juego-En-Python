@@ -82,7 +82,7 @@ def main():
             check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
             check_level(player, enemy_group)    #Compruebo cuando el jugador pasa la pantalla
             
-            if(player.lives == 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
+            if(player.lives <= 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
                 gameover_window() #Muestro la pantalla de game over
                 if event.type == pygame.KEYDOWN: 
                     player.lives = 2
