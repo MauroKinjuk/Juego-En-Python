@@ -1,4 +1,7 @@
 import pygame
+from enemy import Enemy
+
+enemy_group = pygame.sprite.Group()
 
 class Menu():   #creo una clase y la llamo menu
     def __init__(self, game):   #creamos una funcion para inicializar que pide por parametro la clase game para usar sus funciones
@@ -28,10 +31,16 @@ class MainMenu(Menu):   #clase de menu principal que hereda las funciones de la 
 
     def display_menu(self): #funcion para mostrar el menu
         self.run_display = True #para que el menu siga ejecutandose
+        enemy = Enemy()
+        enemy_group.add(enemy)
         while self.run_display: #mientras la variable de arriba sea true
             self.game.check_events()   #funcion que percibe si tocamos una tecla  
             self.check_input()  #llamamos a la funcion que actualiza la variable de estado
-            self.game.display.fill(self.game.BLACK) #relleno el fondo de negro
+            background = pygame.transform.scale(pygame.image.load("bg.png"), (self.game.DISPLAY_W, self.game.DISPLAY_H)) #Seteo el fondo, escalandolo al tamaño de la pantalla
+            self.game.display.blit(background, (0,0))  #inserto el fondo
+            #Agrego los enemigos
+            enemy_group.update(0.20)
+            enemy_group.draw(self.game.display)
             self.game.draw_text('Main Menu', 35, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 80) #escribo "Main menu"
             self.game.draw_text("Comenzar", 30, self.startx, self.starty) #escribo "Comenzar"
             self.game.draw_text("Controles", 30, self.controlx, self.controly)    #escribo "Opciones"
@@ -100,7 +109,8 @@ class ControlMenu(Menu):
         while self.run_display:
             self.game.check_events()    #llamo a la funcion que espera que se ingrese algo por teclado 
             self.check_input()  #llamo a la funcion que verifica que se ingreso en el menu
-            self.game.display.fill((0, 0, 0))   #relleno el fondo de negro
+            background = pygame.transform.scale(pygame.image.load("bg.png"), (self.game.DISPLAY_W, self.game.DISPLAY_H)) #Seteo el fondo, escalandolo al tamaño de la pantalla
+            self.game.display.blit(background, (0,0))  #inserto el fondo
             self.game.draw_text('Controles', 40, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 150)    #escribo el titulo del menu de controles
             self.game.draw_text("Diestro", 25, self.diestrox, self.diestroy)    #Escribo la opcion de diestro
             flechitaspng = pygame.image.load("images/FlechasPng.png")   #cargo la imagen de las flechas

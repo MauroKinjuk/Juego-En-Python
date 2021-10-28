@@ -10,7 +10,6 @@ class Game():   #
         self.DISPLAY_W, self.DISPLAY_H = 800, 600   #variables de ancho y alto de la ventana
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))  #creamos el lienzo con el ancho y alto 
         self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))    #creamos la ventana con el ancho y el alto
-        #self.font_name = '8-BIT WONDER.TTF'    #este comando es para trabajar con una fuente descargada
         self.font_name = pygame.font.get_default_font() #definimos una variable con la fuente por defecto
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255) #colores negro y blanco
         self.sound = True
