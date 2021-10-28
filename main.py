@@ -69,7 +69,7 @@ def main():
         clock.tick(FPS)
         g.curr_menu.display_menu()  #despliego el menu
 
-        while g.playing:
+        while g.playing and player.lives > 0:
             redraw_window()
 
             #Detecto cuando se presionan las teclas del jugador
@@ -81,19 +81,25 @@ def main():
             #Checkeo las colisiones
             check_collision(player, enemy_group)    #Le paso el jugador y el grupo de enemigos
             check_level(player, enemy_group)    #Compruebo cuando el jugador pasa la pantalla
-            
-            if(player.lives <= 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
-                gameover_window() #Muestro la pantalla de game over
-                if event.type == pygame.KEYDOWN: 
-                    player.lives = 2
-                    player.level = 0
-                    player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
-                    player.rect.y = 600 - 170
-                    enemy_group.empty() #Elimino enemigos para evitar que el juego empieze con enemigos ya en el medio de la pantalla
-                    new_enemy = Enemy()
-                    enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
-                    g.playing = False
 
+            #Detecto cuando se cierra la pantalla
+            for event in pygame.event.get():  
+                if event.type == pygame.QUIT:  
+                    g.running, g.playing = False, False  
+                    g.curr_menu.run_display = False 
+                 
+        while(player.lives <= 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
+            gameover_window() #Muestro la pantalla de game over
+            if event.type == pygame.KEYDOWN: 
+                player.lives = 2
+                player.level = 0
+                player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
+                player.rect.y = 600 - 170
+                enemy_group.empty() #Elimino enemigos para evitar que el juego empieze con enemigos ya en el medio de la pantalla
+                new_enemy = Enemy()
+                enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
+                g.playing = False
+            
             #Detecto cuando se cierra la pantalla
             for event in pygame.event.get():  
                 if event.type == pygame.QUIT:  
