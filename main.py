@@ -68,7 +68,6 @@ def main():
         #Refresco la pantalla
         pygame.display.update()
 
-    #main
     #TODO: si se agrega sonido hacer que dependa de la variable g.sound (boolean)
     while g.running:
         clock.tick(FPS)
@@ -90,7 +89,6 @@ def main():
             if(player.lives == 0): #Check si el jugador tiene 0 vidas, si es asi, el if con el juego no va ocurrir
                 gameover_window() #Muestro la pantalla de game over
                 if event.type == pygame.KEYDOWN: 
-                    g.playing = False
                     player.lives = 2
                     player.level = 0
                     player.rect.x = (800 // 2) - 95 #Coloco al jugador en el centro de la pantalla
@@ -98,6 +96,7 @@ def main():
                     enemy_group.empty() #Elimino enemigos para evitar que el juego empieze con enemigos ya en el medio de la pantalla
                     new_enemy = Enemy()
                     enemy_group.add(new_enemy) #Agrego nuevos enemigos para que funcione todo correctamente
+                    g.playing = False
 
             #Detecto cuando se cierra la pantalla
             for event in pygame.event.get():  
