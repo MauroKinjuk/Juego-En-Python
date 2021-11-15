@@ -43,11 +43,11 @@ def main():
         g.window.blit(lives_label,(10,10)), g.window.blit(level_label, (g.DISPLAY_W - lives_label.get_width() - 10, 10))
 
         #Agrego los enemigos
-        enemy_group.update(0.15)
+        enemy_group.update(0.1)
         enemy_group.draw(g.window)
         
         #Agrego al jugador
-        player_group.update(0.2, g.window)
+        player_group.update(0.1, g.window)
         player_group.draw(g.window)
 
         #Refresco la pantalla
@@ -64,7 +64,7 @@ def main():
         #Refresco la pantalla
         pygame.display.update()
 
-    #TODO: si se agrega sonido hacer que dependa de la variable g.sound (boolean)
+    #to.do: si se agrega sonido hacer que dependa de la variable g.sound (boolean)
     while g.running:
         clock.tick(FPS)
         g.curr_menu.display_menu()  #despliego el menu

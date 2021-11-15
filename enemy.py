@@ -8,11 +8,11 @@ class Enemy(pygame.sprite.Sprite):
         #Defino los sprites del carpincho
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
-        self.sprites.append(pygame.image.load("carpincho/izquierda/1.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/2.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/3.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/4.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/5.png"))
+        self.sprites.append(pygame.transform.scale(pygame.image.load("carpincho/izquierda/1.png"), (150, 150)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load("carpincho/izquierda/2.png"), (150, 150)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load("carpincho/izquierda/3.png"), (150, 150)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load("carpincho/izquierda/4.png"), (150, 150)))
+        self.sprites.append(pygame.transform.scale(pygame.image.load("carpincho/izquierda/5.png"), (150, 150)))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite].convert_alpha()
         self.speed = 1  #Velocidad standard

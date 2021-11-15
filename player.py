@@ -5,14 +5,10 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.sprites = []
         self.is_animating = False   #Setea que la animacion sea falso
-        self.sprites.append(pygame.image.load("carpincho/izquierda/1.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/2.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/3.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/4.png"))
-        self.sprites.append(pygame.image.load("carpincho/izquierda/5.png"))
+        self.sprites.append(pygame.image.load("images/player.png"))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
-        self.speed = 3
+        self.speed = 1
         self.health = 100
         self.lives = 2
         self.level = 1
