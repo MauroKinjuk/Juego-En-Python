@@ -12,7 +12,7 @@ class Menu():   #creo una clase y la llamo menu
         self.offset = - 100 #posicionamos el cursor a la izquierda del texto
 
     def draw_cursor(self):  #funcion para darle forma al cursor
-        self.game.draw_text('X', 15, self.cursor_rect.x, self.cursor_rect.y)    #reutilizamos la funcion para darle forma al texto 
+        self.game.draw_text('X', 15, self.cursor_rect.x+20, self.cursor_rect.y)    #reutilizamos la funcion para darle forma al texto 
 
     def blit_screen(self):  #funcion de reset de lienzo ventana y teclas
         self.game.window.blit(self.game.display, (0, 0))    #reseteo el lienzo para que no se superponga
