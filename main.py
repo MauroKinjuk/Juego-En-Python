@@ -1,4 +1,5 @@
 import pygame
+import psycopg2
 from enemy import Enemy
 from player import Player
 from logic import check_collision, check_level
@@ -9,6 +10,10 @@ from game import Game   #importamos la clase Game del archivo game
 pygame.init()
 clock = pygame.time.Clock()
 g = Game()  #creamos una variable para inicializar la clase Game
+
+#agrego la musica
+pygame.mixer.music.load("music/battle.wav")
+pygame.mixer.music.play(-1)
 
 #Pantalla del juego
 carpincho = pygame.image.load("carpincho/izquierda/1.png") #Agrego imagen para la pantalla de game over
@@ -49,7 +54,6 @@ def main():
         #Agrego al jugador
         player_group.update(0.1, g.window)
         player_group.draw(g.window)
-
         #Refresco la pantalla
         pygame.display.update()
 
