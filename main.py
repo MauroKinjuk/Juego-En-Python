@@ -1,5 +1,4 @@
 import pygame
-import psycopg2
 from enemy import Enemy
 from player import Player
 from logic import check_collision, check_level
@@ -68,10 +67,15 @@ def main():
         #Refresco la pantalla
         pygame.display.update()
 
-    #to.do: si se agrega sonido hacer que dependa de la variable g.sound (boolean)
     while g.running:
         clock.tick(FPS)
         g.curr_menu.display_menu()  #despliego el menu
+        
+        #Se escucha musica o no dependiendo si se activa o desactiva desde el menu
+        if(g.sound):
+            pygame.mixer.music.set_volume(1.0)
+        else:
+            pygame.mixer.music.set_volume(0.0)
 
         while g.playing and player.lives > 0:
             redraw_window()
